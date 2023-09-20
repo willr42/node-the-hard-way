@@ -1,0 +1,8 @@
+{
+  "level": 3,
+  "filePrefix": "My_Prefix_",
+  "rollingConfig": {
+    "sizeThreshold": 1024,
+    "timeThreshold": 3600
+  }
+}
