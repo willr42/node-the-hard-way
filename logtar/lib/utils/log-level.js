@@ -26,11 +26,31 @@ class LogLevel {
   }
 
   static assert(logLevel) {
-    if (![this.Debug, this.Info, this.Warn, this.Error, this.Critical].includes(logLevel)) {
+    if (
+      ![this.Debug, this.Info, this.Warn, this.Error, this.Critical].includes(
+        logLevel,
+      )
+    ) {
       throw new Error(
-        `logLevel must be an instance of LogLevel. Unsupported param ${JSON.stringify(logLevel)}`
+        `logLevel must be an instance of LogLevel. Unsupported param ${JSON.stringify(
+          logLevel,
+        )}`,
       );
     }
+  }
+
+  static toString(logLevel) {
+    const levelMap = {
+      [this.Debug]: "DEBUG",
+      [this.Info]: "INFO",
+      [this.Warn]: "WARN",
+      [this.Error]: "ERROR",
+      [this.Critical]: "CRITICAL",
+    };
+    if (levelMap.hasOwnProperty(logLevel)) {
+      return levelMap[logLevel];
+    }
+    throw new Error(`Unsupported log level ${logLevel}`);
   }
 }
 

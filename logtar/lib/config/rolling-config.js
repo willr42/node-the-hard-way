@@ -1,4 +1,7 @@
-const { RollingTimeOptions, RollingSizeOptions } = require("../utils/rolling-options");
+const {
+  RollingTimeOptions,
+  RollingSizeOptions,
+} = require("../utils/rolling-options");
 
 class RollingConfig {
   /**
@@ -9,6 +12,14 @@ class RollingConfig {
    * @type {RollingSizeOptions}
    */
   #sizeThreshold = RollingSizeOptions.FiveMB;
+
+  get timeThreshold() {
+    return this.#timeThreshold;
+  }
+
+  get sizeThreshold() {
+    return this.#sizeThreshold;
+  }
 
   /**
    * @returns {RollingConfig} A new instance of RollingConfig with default values
@@ -61,8 +72,8 @@ class RollingConfig {
     if (!(rollingConfig instanceof RollingConfig)) {
       throw new Error(
         `rollingConfig must be an instance of RollingConfig. Unsupported param ${JSON.stringify(
-          rollingConfig
-        )}`
+          rollingConfig,
+        )}`,
       );
     }
   }
