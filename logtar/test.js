@@ -1,5 +1,5 @@
-const { Logger, LogConfig } = require("./index")
-const path = require("path")
+const { Logger, LogConfig } = require("./index");
+const path = require("path");
 
 async function initializeLogger() {
   const logger = Logger.withConfig(
@@ -11,17 +11,9 @@ async function initializeLogger() {
 
 async function main() {
   let logger = await initializeLogger();
-logger.critical('From the main() function')
-    nested_func(logger)
+  setInterval(() => {
+    logger.critical("seomthing that uses a lot of bites" * 30);
+  }, 20);
 }
 
-function nested_func(logger) {
-    logger.critical('From the nested_func() function')
-    super_nested(logger)
-}
-
-function super_nested(logger) {
-    logger.critical('From the super_nested() function')
-}
-
-main()
+main();

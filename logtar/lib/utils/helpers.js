@@ -12,8 +12,7 @@ function checkAndCreateDir(pathToDir) {
 function getCallerInfo() {
   const error = {};
   Error.captureStackTrace(error);
-  console.log(error.stack);
-  const callerFrame = error.stack.split("\n")[4];
+  const callerFrame = error.stack.split("\n")[5];
   const metaData = callerFrame.split("at ").pop();
   return metaData;
 }

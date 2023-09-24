@@ -18,7 +18,7 @@ class Logger {
 
     const fileName =
       this.#config.filePrefix +
-      new Date().toISOString().replace(/\..*/, "") +
+      new Date().toISOString().replace(/\:/g, "-").split(".")[0] +
       ".log";
     this.#logFileHandle = await fs.open(path.join(logDirPath, fileName), "a+");
   }
@@ -76,12 +76,9 @@ class Logger {
       return;
     }
 
-    const dateIso = new Date().toISOString();
-    const logLevelString = LogLevel.toString(logLevel);
+    await this.#writeToHandle(message, logLevel);
 
-    const logMessage = `[${dateIso}] [${logLevelString}]: ${getCallerInfo()} ${message}\n`;
-
-    await this.#logFileHandle.write(logMessage);
+    await this.#rollingCheck();
   }
 
   debug(message) {
@@ -102,6 +99,37 @@ class Logger {
 
   critical(message) {
     this.#log(message, LogLevel.Critical);
+  }
+
+  /**
+   * @param {string} message the message to be written
+   * @param {string} logLevel the string for the relevant logLevel
+   */
+  async #writeToHandle(message, logLevel) {
+    const dateIso = new Date().toISOString();
+    const logLevelString = LogLevel.toString(logLevel);
+
+    const logMessage = `[${dateIso}] [${logLevelString}]: ${getCallerInfo()} ${message}\n`;
+
+    await this.#logFileHandle.write(logMessage);
+  }
+
+  /**
+   * Checks if the log has passed rolling parameters. If so, create new logfile.
+   */
+  async #rollingCheck() {
+    const { sizeThreshold, timeThreshold } = this.#config.rollingConfig;
+
+    const { size, birthtimeMs } = await this.#logFileHandle.stat();
+    const currentTime = new Date().getTime();
+
+    if (
+      size >= sizeThreshold ||
+      currentTime - birthtimeMs >= timeThreshold * 1000
+    ) {
+      await this.#logFileHandle.close();
+      await this.init();
+    }
   }
 }
 

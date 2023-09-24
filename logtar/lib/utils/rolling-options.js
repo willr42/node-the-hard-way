@@ -1,4 +1,5 @@
 class RollingSizeOptions {
+
   static OneKB = 1024;
   static FiveKB = 5 * 1024;
   static TenKB = 10 * 1024;
@@ -15,9 +16,14 @@ class RollingSizeOptions {
   static HundredMB = 100 * 1024 * 1024;
 
   static assert(sizeThreshold) {
-    if (typeof sizeThreshold !== "number" || sizeThreshold < RollingSizeOptions.OneKB) {
+    if (
+      typeof sizeThreshold !== "number" ||
+      sizeThreshold < RollingSizeOptions.OneKB
+    ) {
       throw new Error(
-        `sizeThreshold must be at least 1KB. Unsupported param ${JSON.stringify(sizeThreshold)}`
+        `sizeThreshold must be at least 1KB. Unsupported param ${JSON.stringify(
+          sizeThreshold,
+        )}`,
       );
     }
   }
@@ -33,14 +39,19 @@ class RollingTimeOptions {
 
   static assert(time_option) {
     if (
-      ![this.Minutely, this.Hourly, this.Daily, this.Weekly, this.Monthly, this.Yearly].includes(
-        time_option
-      )
+      ![
+        this.Minutely,
+        this.Hourly,
+        this.Daily,
+        this.Weekly,
+        this.Monthly,
+        this.Yearly,
+      ].includes(time_option)
     ) {
       throw new Error(
         `time_option must be an instance of RollingConfig. Unsupported param ${JSON.stringify(
-          time_option
-        )}`
+          time_option,
+        )}`,
       );
     }
   }
